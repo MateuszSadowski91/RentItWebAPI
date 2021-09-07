@@ -13,6 +13,7 @@ namespace RentItAPI.Entities
         public DbSet <Reservation> Reservations { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Request> Requests { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
 
@@ -33,7 +34,6 @@ namespace RentItAPI.Entities
             modelBuilder.Entity<Item>()
              .Property(i => i.Price)
              .HasPrecision(7, 2);
-
             modelBuilder.Entity<User>()
              .Property(u => u.Email)
              .IsRequired();
@@ -41,6 +41,7 @@ namespace RentItAPI.Entities
              .Property(r => r.Name)
              .IsRequired()
              .HasMaxLength(30);
+            
 
         }
     }

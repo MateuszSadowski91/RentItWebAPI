@@ -5,7 +5,14 @@ using System.Threading.Tasks;
 
 namespace RentItAPI.Entities
 {
-    public class Reservation
+    public enum Status
+    {
+        Pending,
+        Accepted,
+        Rejected,
+        Canceled
+    }
+    public class Request
     {
         public int Id { get; set; }
         public int ItemId { get; set; }
@@ -15,6 +22,8 @@ namespace RentItAPI.Entities
         public string Email { get; set; }
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }
+        string? Message { get; set; }
+        public Status RequestStatus { get; set; } = Status.Pending;
         public virtual Business Business { get; set; }
         public virtual Item Item { get; set; }
         public virtual User User { get; set; }

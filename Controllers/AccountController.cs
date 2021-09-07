@@ -21,7 +21,6 @@ namespace RentItAPI.Controllers
         {
             _accountservice = accountService;
         }
-
      
         [HttpPost("register")]
         public ActionResult RegisterUser([FromBody] RegisterUserDto dto)
@@ -29,7 +28,6 @@ namespace RentItAPI.Controllers
             _accountservice.RegisterUser(dto);
             return Ok(dto);
         }
-
         
         [HttpPost("login")]
         public ActionResult Login([FromBody] LoginDto dto)
@@ -37,10 +35,5 @@ namespace RentItAPI.Controllers
             string token = _accountservice.GenerateJWT(dto);
             return Ok(token);
         }
-
-
-
-
-
     }
 }

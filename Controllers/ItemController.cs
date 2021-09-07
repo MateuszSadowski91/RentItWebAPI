@@ -13,10 +13,10 @@ namespace RentItAPI.Controllers
 {
     [Route("api/business/{businessId}/item")]
     [ApiController]
-    public class ItemsController : ControllerBase
+    public class ItemController : ControllerBase
     {
         private readonly IItemService _itemService;
-        public ItemsController(IItemService itemService)
+        public ItemController(IItemService itemService)
         {
             _itemService = itemService;
         }

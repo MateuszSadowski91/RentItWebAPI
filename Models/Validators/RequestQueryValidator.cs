@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace RentItAPI.Models.Validators
 {
-    public class RequestQueryValidator : AbstractValidator<RequestQuery>
+    public class ItemQueryValidator : AbstractValidator<ItemQuery>
     {
         private int[] allowedPageSizes = new[] { 5, 10, 15 };
-        private string[] allowedSortByColumnNames = new[] { nameof(Request.FirstName), nameof(Request.Item), nameof(Request.DateFrom), nameof(Request.DateTo) };
-        public RequestQueryValidator()
+        private string[] allowedSortByColumnNames = new[] { nameof(Item.Name), nameof(Item.Price), nameof(Item.Description) };
+        public ItemQueryValidator()
         {
             RuleFor(r => r.PageNumber).GreaterThanOrEqualTo(1);
             RuleFor(r => r.PageSize).Custom((value, context) =>

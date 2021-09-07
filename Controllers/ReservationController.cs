@@ -38,9 +38,9 @@ namespace RentItAPI.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpGet("admin")]
-        public ActionResult GetAllReservationsInBusiness([FromQuery] ReservationQuery query)
+        public ActionResult GetAllReservationsInBusiness([FromQuery] ReservationQuery query, [FromRoute] int businessId)
         {
-            var result = _reservationService.GetAllForBusiness(query);
+            var result = _reservationService.GetAllForBusiness(query, businessId);
             return Ok(result);
         }
     }

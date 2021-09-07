@@ -99,9 +99,7 @@ namespace RentItAPI.Services
         }
         private Business GetBusinessById(int businessId)
         {
-            var business = _dbContext
-                .Businesses
-                .FirstOrDefault(b => b.Id == businessId);
+            var business = GetBusinessById(businessId);
 
             if (business is null)
             {

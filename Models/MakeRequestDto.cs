@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace RentItAPI.Models
 {
-    public class MakeReservationDto
+    public class MakeRequestDto
     {
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }

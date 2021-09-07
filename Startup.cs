@@ -23,14 +23,12 @@ using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
-using RentItAPI.Authorization;
+using FluentEmail.MailKitSmtp;
 
 namespace RentItAPI
 {
     public class Startup
     {
-        
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -41,13 +39,31 @@ namespace RentItAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var from = Configuration.GetSection("Email")["From"];
+            var mailSender = Configuration.GetSection("Gmail")["Sender"];
+            var mailPassword = Configuration.GetSection("Gmail")["Password"];
+            var mailPort = Convert.ToInt32(Configuration.GetSection("Gmail")["Port"]);
+            var server = Configuration.GetSection("Gmail")["Server"];
+            services
+                .AddFluentEmail(mailSender, from)
+                .AddRazorRenderer()
+                .AddMailKitSender(new SmtpClientOptions
+                {
+                    Server = server,
+                    Port = mailPort,
+                    UseSsl = true,
+                    RequiresAuthentication = true,
+                    User = mailSender,
+                    Password = mailPassword,
+                });
+            services.AddScoped<IEmailSender, EmailSender>();
+            services.AddScoped<IRequestService, RequestService>();
+            services.AddScoped<IValidator<RequestQuery>, RequestQueryValidator>();
             services.AddScoped<IValidator<ReservationQuery>, ReservationQueryValidator>();
             services.AddScoped<IValidator<ItemQuery>, ItemQueryValidator> ();
             services.AddScoped<IReservationService, ReservationService>();
             services.AddScoped<IItemService, ItemService>();
             services.AddScoped<IBusinessService, BusinessService>();
-            services.AddScoped<IAuthorizationHandler, ResourceOperationRequirementHandler>();
-
             services.AddAutoMapper(this.GetType().Assembly);
             services.AddHttpContextAccessor();
             services.AddScoped<IUserContextService, UserContextService>();

@@ -10,6 +10,6 @@ namespace RentItAPI.Services
     {
         int MakeReservation(int itemId, MakeReservationDto dto);
         PagedResult<GetReservationDto> GetAll(ReservationQuery query);
-        PagedResult<GetReservationDto> GetAllForBusiness(ReservationQuery query);
+        PagedResult<GetReservationDto> GetAllForBusiness(ReservationQuery query, int businessId);
     }
 }

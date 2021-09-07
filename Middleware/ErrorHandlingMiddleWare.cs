@@ -21,7 +21,7 @@ namespace RentItAPI.Middleware
             {
                 await next.Invoke(context);
             }
-           catch(BadHttpRequestException badRequestException)
+           catch(BadRequestException badRequestException)
             {
                 context.Response.StatusCode = 400;
                 await context.Response.WriteAsync(badRequestException.Message);

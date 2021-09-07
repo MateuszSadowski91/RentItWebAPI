@@ -12,8 +12,6 @@ using System.Threading.Tasks;
 
 namespace RentItAPI.Controllers
 {
-
-    
     [Route("api/business")]
     [ApiController]
     public class BusinessController : ControllerBase
@@ -28,8 +26,8 @@ namespace RentItAPI.Controllers
         [HttpPost]
         public ActionResult CreateBusiness([FromBody] CreateBusinessDto dto)
         {
-            var id = _businessService.Create(dto);
-            return Created($"api/business/{id}", null);
+            var businessId = _businessService.Create(dto);
+            return Created($"api/business/{businessId}", null);
         }
         [HttpGet("{businessId}")]
         public ActionResult GetBusinessById([FromRoute] int businessId)
