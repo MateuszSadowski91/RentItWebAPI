@@ -19,6 +19,14 @@ namespace RentItAPI.Controllers
         {
             _reservationService = reservationService;
         }
+        
+        [Authorize(Roles = "Admin")]
+        [HttpPut]
+        public ActionResult CancelReservation([FromRoute] int reservationId, string message)
+        {
+            _reservationService.CancelReservation(reservationId, message);
+            return Ok();
+        }
 
         [Authorize]
         [HttpPost]

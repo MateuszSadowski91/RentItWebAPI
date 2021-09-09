@@ -24,6 +24,19 @@ namespace RentItAPI.Services
             _userContextService = userContextService;
             _emailSender = emailSender;
         }
+        public void CancelReservation(int reservationId, string message)
+        {
+            var reservation = _dbContext.Reservations.FirstOrDefault(r => r.Id == reservationId);
+            reservation.ReservationStatus = Status.Canceled;
+            _dbContext.SaveChanges();
+
+            var item = reservation.Item;
+            var emailDto = _mapper.Map<ReservationStatusEmailDto>(reservation);
+            emailDto.ReplyMessage = message;
+            _mapper.Map(item, emailDto);
+
+            _emailSender.SendReservationCancellationEmail(emailDto);
+        }
         public int MakeReservation(int itemId, MakeReservationDto dto)
         {
             var reservations = _dbContext.Reservations.Where(r => r.ItemId == itemId);
@@ -85,7 +98,6 @@ namespace RentItAPI.Services
                 var result = new PagedResult<GetReservationDto>(reservationsDtos, totalElementsCount, query.PageSize, query.PageNumber);
                 return result;
         }
-
         public PagedResult<GetReservationDto> GetAllForBusiness(ReservationQuery query, int businessId)
         {
             var baseQuery = _dbContext

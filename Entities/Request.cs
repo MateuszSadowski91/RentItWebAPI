@@ -5,13 +5,6 @@ using System.Threading.Tasks;
 
 namespace RentItAPI.Entities
 {
-    public enum Status
-    {
-        Pending,
-        Accepted,
-        Rejected,
-        Canceled
-    }
     public class Request
     {
         public int Id { get; set; }

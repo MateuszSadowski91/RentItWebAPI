@@ -15,6 +15,7 @@ namespace RentItAPI.Entities
         public string Email { get; set; }
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }
+        public Status ReservationStatus { get; set; } = Status.Accepted;
         public virtual Business Business { get; set; }
         public virtual Item Item { get; set; }
         public virtual User User { get; set; }

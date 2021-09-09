@@ -14,5 +14,6 @@ namespace RentItAPI.Services
         void SendReservationStatusEmail(ReservationStatusEmailDto dto);
         void SendReservationConfirmationEmail(ReservationConfirmationEmailDto dto);
         void SendReservationNotificationEmail(ReservationConfirmationEmailDto dto);
+        void SendReservationCancellationEmail(ReservationStatusEmailDto dto);
     }  
 }

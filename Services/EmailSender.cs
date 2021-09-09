@@ -69,5 +69,14 @@ namespace RentItAPI.Services
 
             await email.SendAsync();
         }
+        public async void SendReservationCancellationEmail(ReservationStatusEmailDto dto)
+        {
+            var email = mailSender
+                .To(dto.Email)
+                .Subject($"Your reservation has been canceled.")
+                 .UsingTemplateFromFile($"{Directory.GetCurrentDirectory()}/wwwroot/Emails/ReservationCancellationEmail.cshtml", dto);
+
+            await email.SendAsync();
+        }
     }
 }
