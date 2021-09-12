@@ -21,6 +21,14 @@ namespace RentItAPI.Controllers
         {
             _businessService = businessService;
         }
+        
+        [Authorize(Roles = "Admin")]
+        [HttpDelete]
+        public ActionResult DeleteBusiness([FromRoute] int businessId)
+        {
+            _businessService.Delete(businessId);
+            return NoContent();
+        }
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
@@ -29,12 +37,14 @@ namespace RentItAPI.Controllers
             var businessId = _businessService.Create(dto);
             return Created($"api/business/{businessId}", null);
         }
+
         [HttpGet("{businessId}")]
         public ActionResult GetBusinessById([FromRoute] int businessId)
         {
             var business = _businessService.GetById(businessId);
             return Ok(business);
         }
+
         [HttpGet]
         public ActionResult GetAllBusinesses()
         {

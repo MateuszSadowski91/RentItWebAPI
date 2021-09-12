@@ -22,6 +22,12 @@ namespace RentItAPI.Services
             _userContextService = userContextService;
             _authorizationService = authorizationService;
         }
+
+        public void Delete (int businessId)
+        {
+            var business = _dbContext.Businesses.FirstOrDefault(b => b.Id == businessId);
+            _dbContext.Remove(business);
+        }
         public IEnumerable<GetBusinessDto> GetAll()
         {
             var businesses = _dbContext.Businesses.ToList();

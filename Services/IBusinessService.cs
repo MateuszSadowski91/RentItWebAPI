@@ -11,5 +11,7 @@ namespace RentItAPI.Services
         int Create(CreateBusinessDto dto);
         GetBusinessDto GetById(int businessId);
         IEnumerable<GetBusinessDto> GetAll();
+        void Delete(int businessId);
+
     }
 }

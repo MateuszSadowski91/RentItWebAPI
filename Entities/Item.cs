@@ -18,7 +18,7 @@ namespace RentItAPI.Entities
 
         public virtual List <Reservation> Reservations { get; set; }
         public virtual Business Business { get; set; }
-
+        public bool IsActive { get; set; } = true; //False indicates that this item is not for a public display anymore.
         public bool RequestRequired { get; set; }
       
         /// <summary>

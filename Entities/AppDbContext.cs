@@ -41,8 +41,6 @@ namespace RentItAPI.Entities
              .Property(r => r.Name)
              .IsRequired()
              .HasMaxLength(30);
-            
-
         }
     }
 }

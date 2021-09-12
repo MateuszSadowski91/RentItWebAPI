@@ -22,6 +22,7 @@ namespace RentItAPI.Services
             _mapper = mapper;
             _userContextService = userContextService;
         }
+
         public PagedResult<GetItemDto> GetAll(int businessId, ItemQuery query)
         {
             var baseQuery = _dbContext
@@ -78,7 +79,6 @@ namespace RentItAPI.Services
             {
                 throw new NotFoundException("Item not found.");
             }
-
             _dbContext.Remove(item);
             _dbContext.SaveChanges();
         }
