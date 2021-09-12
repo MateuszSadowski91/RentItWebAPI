@@ -45,10 +45,18 @@ namespace RentItAPI.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpDelete("{itemId}")]
-        public ActionResult DeleteItem([FromRoute] int itemId, int businessId)
+        public ActionResult DeleteItem(int businessId, [FromRoute] int itemId)
         {
-            _itemService.DeleteItem(itemId, businessId);
+            _itemService.Delete(businessId, itemId);
             return NoContent();
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("{itemId}")]
+        public ActionResult ModifyItem([FromBody] ModifyItemDto dto, int businessId, [FromRoute] int itemId)
+        {
+            _itemService.Modify(dto, businessId, itemId);
+            return Ok();
         }
     }
 }

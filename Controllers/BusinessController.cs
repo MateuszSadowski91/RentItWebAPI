@@ -23,7 +23,7 @@ namespace RentItAPI.Controllers
         }
         
         [Authorize(Roles = "Admin")]
-        [HttpDelete]
+        [HttpDelete("{businessId}")]
         public ActionResult DeleteBusiness([FromRoute] int businessId)
         {
             _businessService.Delete(businessId);

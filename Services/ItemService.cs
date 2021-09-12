@@ -71,7 +71,7 @@ namespace RentItAPI.Services
 
             return itemDto;
         }
-        public void DeleteItem(int itemId, int businessId)
+        public void Delete(int itemId, int businessId)
         {
             var item = _dbContext.Items.FirstOrDefault(i => i.Id == itemId);
 
@@ -106,6 +106,20 @@ namespace RentItAPI.Services
                 throw new NotFoundException("Business not found.");
             }
             return business;
+        }
+
+        public void Modify(ModifyItemDto dto, int businessId, int itemId)
+        {
+            var business = _dbContext.Businesses.FirstOrDefault(b => b.Id == businessId);
+            var item = _dbContext.Items.FirstOrDefault(i => i.Id == itemId);
+
+            if (item is null || item.BusinessId != businessId || item.Business.CreatedById != _userContextService.GetUserId)
+            {
+                throw new NotFoundException("Item not found.");
+            }
+
+            _mapper.Map(dto, item);
+            _dbContext.SaveChanges();
         }
     }
 }

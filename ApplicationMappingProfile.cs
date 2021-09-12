@@ -30,6 +30,7 @@ namespace RentItAPI
             CreateMap <Request, ReservationStatusEmailDto>();
             CreateMap<Item, ReservationStatusEmailDto>()
                 .ForMember(d => d.ItemName, a => a.MapFrom(s => s.Name));
+            CreateMap<ModifyItemDto, Item>();
         }
     }
 }

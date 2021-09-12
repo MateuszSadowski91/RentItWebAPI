@@ -15,7 +15,6 @@ namespace RentItAPI.Entities
         public decimal Price { get; set; }
         public string Image { get; set; }
         public string ImageThumbnail { get; set; }
-
         public virtual List <Reservation> Reservations { get; set; }
         public virtual Business Business { get; set; }
         public bool IsActive { get; set; } = true; //False indicates that this item is not for a public display anymore.
