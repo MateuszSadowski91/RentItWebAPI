@@ -83,10 +83,6 @@ namespace RentItAPI.Services
                 _dbcontext.Users.Add(newUser);
                 _dbcontext.SaveChanges(); 
             }
-
-
-
-
         }
     }
 }

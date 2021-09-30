@@ -16,7 +16,7 @@ namespace RentItAPI.Controllers
         }
 
         [Authorize(Roles ="Admin")]
-        [HttpPut("accept")]
+        [HttpPut("accept/{requestId}")]
         public ActionResult AcceptRequest([FromRoute]int requestId, [FromBody] string? message)
         {
             _requestService.AcceptRequest(requestId, message);
@@ -24,7 +24,7 @@ namespace RentItAPI.Controllers
         }
 
         [Authorize(Roles="Admin")]
-        [HttpPut("reject")]
+        [HttpPut("reject/{requestId}")]
         public ActionResult RejectRequest([FromRoute] int requestId, string? message)
         {
             _requestService.RejectRequest(requestId, message);

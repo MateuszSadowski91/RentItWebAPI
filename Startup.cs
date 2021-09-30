@@ -56,6 +56,7 @@ namespace RentItAPI
                     User = mailSender,
                     Password = mailPassword,
                 });
+            services.AddScoped<IInvoiceService, InvoiceService>();
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddScoped<IRequestService, RequestService>();
             services.AddScoped<IValidator<RequestQuery>, RequestQueryValidator>();
@@ -103,6 +104,7 @@ namespace RentItAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DBSeeder seeder)
         {
+            app.UseStaticFiles();
             seeder.Seed();
             if (env.IsDevelopment())
             {

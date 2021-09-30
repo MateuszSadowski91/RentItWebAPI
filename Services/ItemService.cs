@@ -118,7 +118,7 @@ namespace RentItAPI.Services
                 throw new NotFoundException("Item not found.");
             }
 
-            _mapper.Map(dto, item);
+            _mapper.Map<Item>(dto);
             _dbContext.SaveChanges();
         }
     }
