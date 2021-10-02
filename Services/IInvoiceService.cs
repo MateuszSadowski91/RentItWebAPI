@@ -9,6 +9,6 @@ namespace RentItAPI.Services
     public interface IInvoiceService
     {
         Task Create(InvoiceModel model);
-        void DeleteInvoice();
+        void Delete(DeleteInvoiceDto dto);
     }
 }

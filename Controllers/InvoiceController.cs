@@ -20,11 +20,19 @@ namespace RentItAPI.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public ActionResult CreateInvoice([FromBody] InvoiceModel model)
         {
             _invoiceService.Create(model);
             return Ok();
+        }
+
+        [HttpDelete]
+        [Authorize(Roles = "Admin")]
+        public ActionResult DeleteInvoice([FromBody] DeleteInvoiceDto dto)
+        {
+            _invoiceService.Delete(dto);
+            return NoContent();
         }
     }
 }

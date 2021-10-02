@@ -37,19 +37,36 @@ namespace RentItAPI.Services
 
             var rootPath = Directory.GetCurrentDirectory();
             var fullPath = $"{rootPath}\\wwwroot\\Invoices\\{DateTime.Now.ToString("yyyy-dd-M-HH-mm-ss")}-Invoice.pdf";
-
             using (var stream = new FileStream(fullPath, FileMode.Create))
             {
                 await postResult.ResponseMessage.Content.CopyToAsync(stream);
             }
         }
-
-        public void DeleteInvoice()
+        public void Delete(DeleteInvoiceDto dto)
         {
-            throw new NotImplementedException();
+            var rootPath = Directory.GetCurrentDirectory();
+            var invoices = dto.FileNames;
+            var missingNames = new List<string>();
+
+            foreach (var invoice in invoices)
+            {
+                var fullPath = $"{rootPath}\\wwwroot\\Invoices\\{invoice}.pdf";
+                if (!File.Exists(fullPath))
+                {
+                    missingNames.Add(invoice);
+                    continue;
+                }
+                File.Delete(fullPath);
+            }
+           
+            if (missingNames.Count > 0)
+            {
+                var exception = new NotFoundException($"Some files could not be deleted because they were not found. Please make sure that inserted names are correct."); 
+            }
         }
     }
 }
+
 
     
 

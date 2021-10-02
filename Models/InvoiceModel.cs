@@ -14,29 +14,29 @@ namespace RentItAPI.Models
         /// </summary>
         /// 
         [JsonProperty("number")]
-        public string number { get; set; }
+        public string Number { get; set; }
         [JsonProperty("date")]
-        public string date { get; set; }
+        public string Date { get; set; }
         [JsonProperty("from")]
-        public string from { get; set; }
+        public string From { get; set; }
         [JsonProperty("to")]
-        public string to { get; set; }
+        public string To { get; set; }
         [JsonProperty("currency")]
-        public string currency { get; set; }
+        public string Currency { get; set; }
         [JsonProperty("tax")]
-        public int tax { get; set; }
+        public int Tax { get; set; }
         [JsonProperty("items")]
-        public List<LineItemModel> items { get; set; }
+        public List<LineItemModel> Items { get; set; }
         [JsonProperty("fields")]
         public Fields fields { get; set; }
         public class Fields
         {
             [JsonProperty("tax")]
-            public string tax { get; set; }
+            public string Tax { get; set; }
             [JsonProperty("discounts")]
-            public bool discounts { get; set; }
+            public bool Discounts { get; set; }
             [JsonProperty("shipping")]
-            public bool shipping { get; set; }
+            public bool Shipping { get; set; }
         }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using RentItAPI.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -38,6 +39,11 @@ namespace RentItAPI.Middleware
                 _logger.LogError(externalServerError, externalServerError.Message);
                 context.Response.StatusCode = 502;
                 await context.Response.WriteAsync(externalServerError.Message);
+            }
+            catch (FileNotFoundException fileNotFoundException)
+            {
+                context.Response.StatusCode = 404;
+                await context.Response.WriteAsync(fileNotFoundException.Message);
             }
             catch (Exception e)
             {
