@@ -45,6 +45,11 @@ namespace RentItAPI.Middleware
                 context.Response.StatusCode = 404;
                 await context.Response.WriteAsync(fileNotFoundException.Message);
             }
+            catch (AccessForbiddenException accessForbiddenException)
+            {
+                context.Response.StatusCode = 403;
+                await context.Response.WriteAsync(accessForbiddenException.Message);
+            }
             catch (Exception e)
             {
                 _logger.LogError(e, e.Message);

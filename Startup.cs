@@ -24,6 +24,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using FluentEmail.MailKitSmtp;
+using Azure.Storage.Blobs;
 
 namespace RentItAPI
 {
@@ -39,6 +40,8 @@ namespace RentItAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton(b => new BlobServiceClient(Configuration.GetValue<string>("AzureBlobStorageConnectionString")));
+            services.AddSingleton<IBlobService, BlobService>();
             var from = Configuration.GetSection("Email")["From"];
             var mailSender = Configuration.GetSection("Gmail")["Sender"];
             var mailPassword = Configuration.GetSection("Gmail")["Password"];

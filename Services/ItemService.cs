@@ -22,7 +22,6 @@ namespace RentItAPI.Services
             _mapper = mapper;
             _userContextService = userContextService;
         }
-
         public PagedResult<GetItemDto> GetAll(int businessId, ItemQuery query)
         {
             var baseQuery = _dbContext
@@ -46,16 +45,13 @@ namespace RentItAPI.Services
                      ? baseQuery.OrderBy(selectedColumn)
                      : baseQuery.OrderByDescending(selectedColumn);
             }
-
             var reservations = baseQuery
                  .Skip(query.PageSize * (query.PageNumber - 1))
                  .Take(query.PageSize)
                  .ToList();
 
             var totalElementsCount = baseQuery.Count();
-
             var itemsDtos = _mapper.Map<List<GetItemDto>>(reservations);
-
             var result = new PagedResult<GetItemDto>(itemsDtos, totalElementsCount, query.PageSize, query.PageNumber);
 
             return result;

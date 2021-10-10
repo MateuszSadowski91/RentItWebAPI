@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using RentItAPI.Models;
 using RentItAPI.Services;
 using System;
@@ -19,20 +20,38 @@ namespace RentItAPI.Controllers
             _invoiceService = invoiceService;
         }
 
-        [HttpPost]
         [Authorize(Roles = "Admin")]
-        public ActionResult CreateInvoice([FromBody] InvoiceModel model)
+        [HttpPost("{businessId}")]
+        public async Task <ActionResult> CreateInvoiceAsync([FromRoute] int businessId, [FromBody] InvoiceModel model)
         {
-            _invoiceService.Create(model);
-            return Ok();
+            await _invoiceService.CreateAsync(businessId, model);
+            return Ok();  
         }
 
-        [HttpDelete]
         [Authorize(Roles = "Admin")]
-        public ActionResult DeleteInvoice([FromBody] DeleteInvoiceDto dto)
+        [HttpDelete("{businessId}")]
+        public async Task <ActionResult> DeleteInvoiceAsync([FromRoute] int businessId, [FromBody] DeleteInvoiceDto dto)
         {
-            _invoiceService.Delete(dto);
+            await _invoiceService.DeleteAsync(businessId, dto);
             return NoContent();
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("{businessId}")]
+        public async Task <ActionResult> GetInvoiceAsync([FromRoute] int businessId, [FromBody] GetInvoiceDto dto)
+        {
+            var fileName = dto.InvoiceName;
+            var result = await _invoiceService.GetAsync(businessId, fileName);
+            var contentType = result.ContentType;
+            return File(result.Content, contentType, fileName);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("{businessId}/list")]
+        public async Task<ActionResult> GetInvoiceListAsync([FromRoute] int businessId)
+        {
+            var result = await _invoiceService.GetListAsync(businessId);
+            return Ok(result);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using RentItAPI.Entities;
+using RentItAPI.Exceptions;
 using RentItAPI.Models;
 using System;
 using System.Collections.Generic;
@@ -14,18 +15,23 @@ namespace RentItAPI.Services
         private readonly AppDbContext _dbContext;
         private readonly IMapper _mapper;
         private readonly IUserContextService _userContextService;
-        private readonly IAuthorizationService _authorizationService;
-        public BusinessService(IMapper mapper, IUserContextService userContextService, AppDbContext dbContext, IAuthorizationService authorizationService)
+        
+        public BusinessService(IMapper mapper, IUserContextService userContextService, AppDbContext dbContext)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _userContextService = userContextService;
-            _authorizationService = authorizationService;
         }
 
         public void Delete (int businessId)
         {
             var business = _dbContext.Businesses.FirstOrDefault(b => b.Id == businessId);
+            var userId = _userContextService.GetUserId;
+            if(userId != business.CreatedById)
+            {
+                throw new AccessForbiddenException("You do not have a permission to access this resource.");
+            }
+
             _dbContext.Remove(business);
         }
         public IEnumerable<GetBusinessDto> GetAll()

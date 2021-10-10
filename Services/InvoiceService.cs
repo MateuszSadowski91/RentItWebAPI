@@ -1,15 +1,11 @@
 ﻿using AutoMapper;
 using Flurl.Http;
-using Newtonsoft.Json;
 using RentItAPI.Entities;
 using RentItAPI.Exceptions;
 using RentItAPI.Models;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace RentItAPI.Services
@@ -17,51 +13,94 @@ namespace RentItAPI.Services
     public class InvoiceService : IInvoiceService
     {
         private readonly AppDbContext _dbContext;
-        private readonly IMapper _mapper;
+        private readonly IBlobService _blobService;
+        private readonly IUserContextService _userContextService;
 
-        public InvoiceService(AppDbContext dbContext, IMapper mapper)
+        public InvoiceService(AppDbContext dbContext, IBlobService blobService, IUserContextService userContextService)
         {
+            _blobService = blobService;
             _dbContext = dbContext;
-            _mapper = mapper;
+            _userContextService = userContextService;
         }
-        public async Task Create(InvoiceModel model)
+        public async Task<List<string>> GetListAsync(int businessId)
         {
+            var business = GetBusiness(businessId);
+            ValidateInput(business);
+            var taxNumber = business.TaxNumber;
+            var invoiceList = await _blobService.ListInvoiceBlobsAsync(taxNumber);
+
+            return invoiceList.ToList();
+        }
+        public async Task <BlobInformation> GetAsync (int businessId, string fileName)
+        {
+            var business = GetBusiness(businessId);
+            ValidateInput(business);
+            var invoice = await _blobService.GetInvoiceBlobAsync(fileName);
+
+            return invoice;
+        }
+        public async Task CreateAsync(int businessId, InvoiceModel model)
+        {
+            var business = GetBusiness(businessId);
+            ValidateInput(business);
             var postResult = await "https://invoice-generator.com"
             .WithHeader("content-type", "application/json")
             .PostJsonAsync(model);
 
-            if(!postResult.ResponseMessage.IsSuccessStatusCode)
+            if (!postResult.ResponseMessage.IsSuccessStatusCode)
             {
                 throw new ExternalServerError("Something went wrong in an external server, outside of this application.");
             }
 
-            var rootPath = Directory.GetCurrentDirectory();
-            var fullPath = $"{rootPath}\\wwwroot\\Invoices\\{DateTime.Now.ToString("yyyy-dd-M-HH-mm-ss")}-Invoice.pdf";
-            using (var stream = new FileStream(fullPath, FileMode.Create))
+            var fileName = $"{business.TaxNumber}-{business.Name}-{DateTime.Now:yyyy-dd-M-HH-mm-ss}.pdf";
+            await _blobService.UploadHttpContentAsync(postResult.ResponseMessage.Content, fileName);
+        }
+        public async Task DeleteAsync(int businessId, DeleteInvoiceDto dto)
+        {
+            var business = GetBusiness(businessId);
+            var namesToDelete = dto.FileNames;
+            var invoicesOnServer = await _blobService.ListInvoiceBlobsAsync(business.TaxNumber);
+
+            ValidateInput(business, namesToDelete, invoicesOnServer);
+
+            foreach (var name in namesToDelete)
             {
-                await postResult.ResponseMessage.Content.CopyToAsync(stream);
+                await _blobService.DeleteInvoiceBlobAsync(name);
             }
         }
-        public void Delete(DeleteInvoiceDto dto)
+        private Business GetBusiness(int businessId)
         {
-            var rootPath = Directory.GetCurrentDirectory();
-            var invoices = dto.FileNames;
-            var missingNames = new List<string>();
-
-            foreach (var invoice in invoices)
+            var business = _dbContext.Businesses.FirstOrDefault(b => b.Id == businessId);
+            if (business == null || business.CreatedById != _userContextService.GetUserId)
             {
-                var fullPath = $"{rootPath}\\wwwroot\\Invoices\\{invoice}.pdf";
-                if (!File.Exists(fullPath))
-                {
-                    missingNames.Add(invoice);
-                    continue;
-                }
-                File.Delete(fullPath);
+                throw new NotFoundException("Business not found. Please check the inserted values.");
             }
+            return business;
+        }
+        private static void ValidateInput(Business business, List<string> namesToDelete, IEnumerable<string> invoicesOnServer)
+        {
            
-            if (missingNames.Count > 0)
+            foreach (var name in namesToDelete)
             {
-                var exception = new NotFoundException($"Some files could not be deleted because they were not found. Please make sure that inserted names are correct."); 
+                var taxMatchesPrefix = name.StartsWith(business.TaxNumber);
+                if (!taxMatchesPrefix)
+                {
+                    throw new NotFoundException("Some files were not found. Please check the inserted names.");
+                }
+            }
+            var listOfInvoices = invoicesOnServer.ToList();
+
+            foreach (var name in listOfInvoices)
+            {
+                if(!listOfInvoices.Contains(name))
+                throw new NotFoundException("Some files were not found. Please check the inserted names.");
+            }
+        }
+        private void ValidateInput(Business business)
+        {
+            if (business.CreatedById != _userContextService.GetUserId)
+            {
+                throw new AccessForbiddenException("You do not have a permission to access this resource.");
             }
         }
     }
