@@ -1,9 +1,5 @@
-﻿using Azure.Storage.Blobs.Models;
-using RentItAPI.Models;
-using System;
+﻿using RentItAPI.Models;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 

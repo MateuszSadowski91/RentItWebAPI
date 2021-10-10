@@ -1,14 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using RentItAPI.Entities;
+﻿using Microsoft.AspNetCore.Mvc;
 using RentItAPI.Models;
 using RentItAPI.Services;
 using Restaurantapi2.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace RentItAPI.Controllers
 {

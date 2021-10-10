@@ -1,15 +1,6 @@
 ﻿using FluentEmail.Core;
-using FluentEmail.Smtp;
-using Microsoft.AspNetCore.Mvc;
-using RentItAPI.Entities;
 using RentItAPI.Models;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Mail;
-using System.Threading.Tasks;
 
 namespace RentItAPI.Services
 {

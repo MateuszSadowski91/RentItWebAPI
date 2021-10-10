@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Flurl.Http;
+﻿using Flurl.Http;
 using RentItAPI.Entities;
 using RentItAPI.Exceptions;
 using RentItAPI.Models;
