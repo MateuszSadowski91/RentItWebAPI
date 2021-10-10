@@ -20,6 +20,9 @@ namespace RentItAPI.Entities
              .Property(b => b.Name)
              .IsRequired()
              .HasMaxLength(50);
+            modelBuilder.Entity<Business>()
+            .Property(b => b.TaxNumber)
+            .IsRequired();
             modelBuilder.Entity<Item>()
              .Property(i => i.Name)
              .IsRequired()
