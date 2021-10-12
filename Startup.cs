@@ -33,6 +33,14 @@ namespace RentItAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("FrontEndClient", builder =>
+                builder.AllowAnyMethod()
+                .AllowAnyHeader()
+                .WithOrigins(Configuration["AllowedOrigins"])
+                );
+            });
             services.AddSingleton(b => new BlobServiceClient(Configuration.GetValue<string>("AzureBlobStorageConnectionString")));
             services.AddSingleton<IBlobService, BlobService>();
             var from = Configuration.GetSection("Email")["From"];
@@ -100,6 +108,7 @@ namespace RentItAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DBSeeder seeder)
         {
+            app.UseCors("FrontEndClient");
             app.UseStaticFiles();
             seeder.Seed();
             if (env.IsDevelopment())

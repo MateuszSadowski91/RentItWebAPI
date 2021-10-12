@@ -21,7 +21,8 @@ In current stage this application includes:
 * making reservations and requests regarding offered items (Book-as-you-go/Book On Request);
 * sending automatic notification e-mails to customers and business;
 * creating invoices with an external, free Web API and saving them on Azure Blobs;
-* basic error handling.
+* basic error handling;
+* error logging.
 
 ## Technologies
 
@@ -40,4 +41,6 @@ Moreover, the application uses content from:
 To run this application, simply change credentials in appsettings.json file. This includes following sections: `Azure Blob Storage Connection String`, `Mail`, `Gmail`, `Authentication`.
 You can deploy it on any server or run it locally by changing the database connection string in appsettings.Development.json.
 To make it work with Azure Storage, go to BlobService.cs and in method `GetBlobContainerClient` pass a parameter with the name of your Blob Container. (in project files, this variable is set to `"invoice"`).
+Please keep in mind that the default CORS policy is set to allow `http://localhost:8080` for testing purposes and development. In order to change it, go to appsettings.json and change the value for `AllowedOrigins`.
+You can also make changes to whole policy setting in Startup.cs and define your own by changing values in `services.AddCors` .
 
