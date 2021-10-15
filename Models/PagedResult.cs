@@ -13,6 +13,7 @@ namespace RentItAPI.Models
             ElementsTo = ElementsFrom + pageSize - 1;
             TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
         }
+
         public List<T> Elements { get; set; }
         public int TotalPages { get; set; }
         public int ElementsFrom { get; set; }

@@ -1,3 +1,5 @@
+using Azure.Storage.Blobs;
+using FluentEmail.MailKitSmtp;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
@@ -7,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RentItAPI.Entities;
 using RentItAPI.Middleware;
@@ -14,10 +17,7 @@ using RentItAPI.Models;
 using RentItAPI.Models.Validators;
 using RentItAPI.Services;
 using System;
-using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using FluentEmail.MailKitSmtp;
-using Azure.Storage.Blobs;
 
 namespace RentItAPI
 {
@@ -65,7 +65,7 @@ namespace RentItAPI
             services.AddScoped<IRequestService, RequestService>();
             services.AddScoped<IValidator<RequestQuery>, RequestQueryValidator>();
             services.AddScoped<IValidator<ReservationQuery>, ReservationQueryValidator>();
-            services.AddScoped<IValidator<ItemQuery>, ItemQueryValidator> ();
+            services.AddScoped<IValidator<ItemQuery>, ItemQueryValidator>();
             services.AddScoped<IReservationService, ReservationService>();
             services.AddScoped<IItemService, ItemService>();
             services.AddScoped<IBusinessService, BusinessService>();
@@ -105,6 +105,7 @@ namespace RentItAPI
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RentItAPI", Version = "v1" });
             });
         }
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DBSeeder seeder)
         {

@@ -14,12 +14,14 @@ namespace RentItAPI.Services
         private readonly AppDbContext _dbContext;
         private readonly IMapper _mapper;
         private readonly IUserContextService _userContextService;
+
         public ItemService(AppDbContext dbContext, IMapper mapper, IUserContextService userContextService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _userContextService = userContextService;
         }
+
         public PagedResult<GetItemDto> GetAll(int businessId, ItemQuery query)
         {
             var baseQuery = _dbContext
@@ -54,6 +56,7 @@ namespace RentItAPI.Services
 
             return result;
         }
+
         public GetItemDto GetById(int businessId, int itemId)
         {
             var item = _dbContext.Items.FirstOrDefault(i => i.Id == itemId);
@@ -65,17 +68,19 @@ namespace RentItAPI.Services
 
             return itemDto;
         }
+
         public void Delete(int itemId, int businessId)
         {
             var item = _dbContext.Items.FirstOrDefault(i => i.Id == itemId);
 
-            if (item is null || item.BusinessId != businessId || item.Business.CreatedById !=_userContextService.GetUserId)
+            if (item is null || item.BusinessId != businessId || item.Business.CreatedById != _userContextService.GetUserId)
             {
                 throw new NotFoundException("Item not found.");
             }
             _dbContext.Remove(item);
             _dbContext.SaveChanges();
         }
+
         public int Create(CreateItemDto dto, int businessId)
         {
             var business = _dbContext.Businesses.FirstOrDefault(b => b.Id == businessId);
@@ -91,6 +96,7 @@ namespace RentItAPI.Services
 
             return itemEntity.Id;
         }
+
         private Business GetBusinessById(int businessId)
         {
             var business = GetBusinessById(businessId);

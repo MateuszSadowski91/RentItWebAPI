@@ -2,19 +2,20 @@
 
 namespace RentItAPI.Entities
 {
-    public class AppDbContext: DbContext
+    public class AppDbContext : DbContext
     {
-        public DbSet <Business> Businesses { get; set; }
-        public DbSet <Item> Items { get; set; }
-        public DbSet <Reservation> Reservations { get; set; }
+        public DbSet<Business> Businesses { get; set; }
+        public DbSet<Item> Items { get; set; }
+        public DbSet<Reservation> Reservations { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Request> Requests { get; set; }
+
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-
         }
-        protected override void OnModelCreating (ModelBuilder modelBuilder)
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Business>()
              .Property(b => b.Name)

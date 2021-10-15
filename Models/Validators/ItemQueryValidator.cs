@@ -1,9 +1,7 @@
 ﻿using FluentValidation;
 using RentItAPI.Entities;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace RentItAPI.Models.Validators
 {
@@ -11,6 +9,7 @@ namespace RentItAPI.Models.Validators
     {
         private int[] allowedPageSizes = new[] { 5, 10, 15 };
         private string[] allowedSortByColumnNames = new[] { nameof(Request.FirstName), nameof(Request.Item), nameof(Request.DateFrom), nameof(Request.DateTo) };
+
         public RequestQueryValidator()
         {
             RuleFor(r => r.PageNumber).GreaterThanOrEqualTo(1);

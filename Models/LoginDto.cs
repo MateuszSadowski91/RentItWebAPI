@@ -1,4 +1,4 @@
-﻿namespace Restaurantapi2.Models
+﻿namespace RentItAPI.Models
 {
     public class LoginDto
     {

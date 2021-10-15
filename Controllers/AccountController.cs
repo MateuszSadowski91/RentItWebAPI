@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RentItAPI.Models;
 using RentItAPI.Services;
-using Restaurantapi2.Models;
 
 namespace RentItAPI.Controllers
 {
@@ -10,18 +9,19 @@ namespace RentItAPI.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
+
         public AccountController(IAccountService accountService)
         {
             _accountService = accountService;
         }
-     
+
         [HttpPost("register")]
         public ActionResult RegisterUser([FromBody] RegisterUserDto dto)
         {
             _accountService.RegisterUser(dto);
             return Ok(dto);
         }
-        
+
         [HttpPost("login")]
         public ActionResult Login([FromBody] LoginDto dto)
         {

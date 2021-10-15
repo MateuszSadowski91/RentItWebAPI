@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace RentItAPI.Entities
 {
@@ -14,6 +11,5 @@ namespace RentItAPI.Entities
         public string Description { get; set; }
         public string TaxNumber { get; set; }
         public virtual List<Item> Items { get; set; }
-        
     }
 }

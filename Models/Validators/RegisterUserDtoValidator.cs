@@ -1,9 +1,6 @@
 ﻿using FluentValidation;
 using RentItAPI.Entities;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace RentItAPI.Models.Validators
 {
@@ -25,8 +22,6 @@ namespace RentItAPI.Models.Validators
                     context.AddFailure("Email", "This email is already taken.");
                 }
             });
-
-        }
         }
     }
-
+}

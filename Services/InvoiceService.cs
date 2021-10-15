@@ -21,6 +21,7 @@ namespace RentItAPI.Services
             _dbContext = dbContext;
             _userContextService = userContextService;
         }
+
         public async Task<List<string>> GetListAsync(int businessId)
         {
             var business = GetBusiness(businessId);
@@ -30,7 +31,8 @@ namespace RentItAPI.Services
 
             return invoiceList.ToList();
         }
-        public async Task <BlobInformation> GetAsync (int businessId, string fileName)
+
+        public async Task<BlobInformation> GetAsync(int businessId, string fileName)
         {
             var business = GetBusiness(businessId);
             ValidateInput(business);
@@ -38,6 +40,7 @@ namespace RentItAPI.Services
 
             return invoice;
         }
+
         public async Task CreateAsync(int businessId, InvoiceModel model)
         {
             var business = GetBusiness(businessId);
@@ -54,6 +57,7 @@ namespace RentItAPI.Services
             var fileName = $"{business.TaxNumber}-{business.Name}-{DateTime.Now:yyyy-dd-M-HH-mm-ss}.pdf";
             await _blobService.UploadHttpContentAsync(postResult.ResponseMessage.Content, fileName);
         }
+
         public async Task DeleteAsync(int businessId, DeleteInvoiceDto dto)
         {
             var business = GetBusiness(businessId);
@@ -67,6 +71,7 @@ namespace RentItAPI.Services
                 await _blobService.DeleteInvoiceBlobAsync(name);
             }
         }
+
         private Business GetBusiness(int businessId)
         {
             var business = _dbContext.Businesses.FirstOrDefault(b => b.Id == businessId);
@@ -76,9 +81,9 @@ namespace RentItAPI.Services
             }
             return business;
         }
+
         private static void ValidateInput(Business business, List<string> namesToDelete, IEnumerable<string> invoicesOnServer)
         {
-           
             foreach (var name in namesToDelete)
             {
                 var taxMatchesPrefix = name.StartsWith(business.TaxNumber);
@@ -91,10 +96,11 @@ namespace RentItAPI.Services
 
             foreach (var name in listOfInvoices)
             {
-                if(!listOfInvoices.Contains(name))
-                throw new NotFoundException("Some files were not found. Please check the inserted names.");
+                if (!listOfInvoices.Contains(name))
+                    throw new NotFoundException("Some files were not found. Please check the inserted names.");
             }
         }
+
         private void ValidateInput(Business business)
         {
             if (business.CreatedById != _userContextService.GetUserId)
@@ -104,8 +110,3 @@ namespace RentItAPI.Services
         }
     }
 }
-
-
-    
-
-

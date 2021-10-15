@@ -4,7 +4,7 @@ using RentItAPI.Models;
 
 namespace RentItAPI
 {
-    public class ApplicationMappingProfile: Profile
+    public class ApplicationMappingProfile : Profile
     {
         public ApplicationMappingProfile()
         {
@@ -23,12 +23,10 @@ namespace RentItAPI
             CreateMap<Request, ReservationConfirmationEmailDto>();
             CreateMap<Item, ReservationConfirmationEmailDto>()
                 .ForMember(d => d.ItemName, a => a.MapFrom(s => s.Name));
-            CreateMap <Request, ReservationStatusEmailDto>();
+            CreateMap<Request, ReservationStatusEmailDto>();
             CreateMap<Item, ReservationStatusEmailDto>()
                 .ForMember(d => d.ItemName, a => a.MapFrom(s => s.Name));
             CreateMap<ModifyItemDto, Item>();
-           
         }
     }
 }
-

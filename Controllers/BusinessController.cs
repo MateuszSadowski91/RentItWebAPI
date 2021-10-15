@@ -10,11 +10,12 @@ namespace RentItAPI.Controllers
     public class BusinessController : ControllerBase
     {
         private readonly IBusinessService _businessService;
+
         public BusinessController(IBusinessService businessService)
         {
             _businessService = businessService;
         }
-        
+
         [Authorize(Roles = "Admin")]
         [HttpDelete("{businessId}")]
         public ActionResult DeleteBusiness([FromRoute] int businessId)

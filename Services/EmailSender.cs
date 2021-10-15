@@ -7,19 +7,22 @@ namespace RentItAPI.Services
     public class EmailSender : IEmailSender
     {
         private readonly IFluentEmail mailSender;
+
         public EmailSender(IFluentEmail fluentEmail)
         {
             mailSender = fluentEmail;
         }
+
         public async void SendRequestNotificationEmail(RequestEmailDto dto)
         {
             var email = mailSender
             .To("rentitwebapi@gmail.com")
             .Subject($"New request from {dto.FirstName} {dto.LastName}")
             .UsingTemplateFromFile($"{Directory.GetCurrentDirectory()}/wwwroot/Emails/RequestEmail.cshtml", dto);
- 
+
             await email.SendAsync();
         }
+
         public async void SendRequestConfirmationEmail(RequestEmailDto dto)
         {
             var email = mailSender
@@ -29,6 +32,7 @@ namespace RentItAPI.Services
 
             await email.SendAsync();
         }
+
         public async void SendReservationStatusEmail(ReservationStatusEmailDto dto)
         {
             var email = mailSender
@@ -37,11 +41,12 @@ namespace RentItAPI.Services
             if (dto.ReservationStatus is "Accepted")
             {
                 email.UsingTemplateFromFile($"{Directory.GetCurrentDirectory()}/wwwroot/Emails/RequestAcceptedEmail.cshtml", dto);
-            }    
+            }
             email.UsingTemplateFromFile($"{Directory.GetCurrentDirectory()}/wwwroot/Emails/RequestRejectedEmail.cshtml", dto);
 
             await email.SendAsync();
         }
+
         public async void SendReservationConfirmationEmail(ReservationConfirmationEmailDto dto)
         {
             var email = mailSender
@@ -51,6 +56,7 @@ namespace RentItAPI.Services
 
             await email.SendAsync();
         }
+
         public async void SendReservationNotificationEmail(ReservationConfirmationEmailDto dto)
         {
             var email = mailSender
@@ -60,6 +66,7 @@ namespace RentItAPI.Services
 
             await email.SendAsync();
         }
+
         public async void SendReservationCancellationEmail(ReservationStatusEmailDto dto)
         {
             var email = mailSender

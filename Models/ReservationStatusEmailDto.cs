@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace RentItAPI.Models
-{  
+{
     public class ReservationStatusEmailDto
     {
         public string FirstName { get; set; }

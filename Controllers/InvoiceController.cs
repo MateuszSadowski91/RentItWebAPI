@@ -11,6 +11,7 @@ namespace RentItAPI.Controllers
     public class InvoiceController : ControllerBase
     {
         private readonly IInvoiceService _invoiceService;
+
         public InvoiceController(IInvoiceService invoiceService)
         {
             _invoiceService = invoiceService;
@@ -18,15 +19,15 @@ namespace RentItAPI.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost("{businessId}")]
-        public async Task <ActionResult> CreateInvoiceAsync([FromRoute] int businessId, [FromBody] InvoiceModel model)
+        public async Task<ActionResult> CreateInvoiceAsync([FromRoute] int businessId, [FromBody] InvoiceModel model)
         {
             await _invoiceService.CreateAsync(businessId, model);
-            return Ok();  
+            return Ok();
         }
 
         [Authorize(Roles = "Admin")]
         [HttpDelete("{businessId}")]
-        public async Task <ActionResult> DeleteInvoiceAsync([FromRoute] int businessId, [FromBody] DeleteInvoiceDto dto)
+        public async Task<ActionResult> DeleteInvoiceAsync([FromRoute] int businessId, [FromBody] DeleteInvoiceDto dto)
         {
             await _invoiceService.DeleteAsync(businessId, dto);
             return NoContent();
@@ -34,7 +35,7 @@ namespace RentItAPI.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpGet("{businessId}")]
-        public async Task <ActionResult> GetInvoiceAsync([FromRoute] int businessId, [FromBody] GetInvoiceDto dto)
+        public async Task<ActionResult> GetInvoiceAsync([FromRoute] int businessId, [FromBody] GetInvoiceDto dto)
         {
             var fileName = dto.InvoiceName;
             var result = await _invoiceService.GetAsync(businessId, fileName);

@@ -10,20 +10,21 @@ namespace RentItAPI.Controllers
     public class RequestController : ControllerBase
     {
         private readonly IRequestService _requestService;
+
         public RequestController(IRequestService requestService)
         {
             _requestService = requestService;
         }
 
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPut("accept/{requestId}")]
-        public ActionResult AcceptRequest([FromRoute]int requestId, [FromBody] string? message)
+        public ActionResult AcceptRequest([FromRoute] int requestId, [FromBody] string? message)
         {
             _requestService.AcceptRequest(requestId, message);
             return Ok();
         }
 
-        [Authorize(Roles="Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPut("reject/{requestId}")]
         public ActionResult RejectRequest([FromRoute] int requestId, string? message)
         {
@@ -56,7 +57,3 @@ namespace RentItAPI.Controllers
         }
     }
 }
-
-        
-   
-

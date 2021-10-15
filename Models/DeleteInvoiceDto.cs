@@ -4,6 +4,6 @@ namespace RentItAPI.Models
 {
     public class DeleteInvoiceDto
     {
-        public List <string> FileNames { get; set; }
+        public List<string> FileNames { get; set; }
     }
 }

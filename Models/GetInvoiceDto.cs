@@ -2,6 +2,6 @@
 {
     public class GetInvoiceDto
     {
-        public  string InvoiceName { get; set; }
+        public string InvoiceName { get; set; }
     }
 }

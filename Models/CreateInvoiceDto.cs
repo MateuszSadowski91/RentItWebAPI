@@ -11,6 +11,6 @@ namespace RentItAPI.Models
         public string TaxRate { get; set; }
         public string Currency { get; set; }
         public string Quantity { get; set; }
-        public IEnumerable<string> Items {get; set;}
+        public IEnumerable<string> Items { get; set; }
     }
 }

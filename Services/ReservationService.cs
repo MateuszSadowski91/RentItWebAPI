@@ -16,6 +16,7 @@ namespace RentItAPI.Services
         private readonly IMapper _mapper;
         private readonly IUserContextService _userContextService;
         private readonly IEmailSender _emailSender;
+
         public ReservationService(AppDbContext dbContext, IMapper mapper, IUserContextService userContextService, IEmailSender emailSender)
         {
             _dbContext = dbContext;
@@ -23,6 +24,7 @@ namespace RentItAPI.Services
             _userContextService = userContextService;
             _emailSender = emailSender;
         }
+
         public void CancelReservation(int reservationId, string message)
         {
             var reservation = _dbContext.Reservations.FirstOrDefault(r => r.Id == reservationId);
@@ -36,6 +38,7 @@ namespace RentItAPI.Services
 
             _emailSender.SendReservationCancellationEmail(emailDto);
         }
+
         public int MakeReservation(int itemId, MakeReservationDto dto)
         {
             var reservations = _dbContext.Reservations.Where(r => r.ItemId == itemId);
@@ -65,6 +68,7 @@ namespace RentItAPI.Services
 
             return reservationEntity.Id;
         }
+
         public PagedResult<GetReservationDto> GetAll(ReservationQuery query)
         {
             var baseQuery = _dbContext
@@ -87,20 +91,21 @@ namespace RentItAPI.Services
                      ? baseQuery.OrderBy(selectedColumn)
                      : baseQuery.OrderByDescending(selectedColumn);
             }
-                var reservations = baseQuery
-                     .Skip(query.PageSize * (query.PageNumber - 1))
-                     .Take(query.PageSize)
-                     .ToList();
+            var reservations = baseQuery
+                 .Skip(query.PageSize * (query.PageNumber - 1))
+                 .Take(query.PageSize)
+                 .ToList();
 
-                var totalElementsCount = baseQuery.Count();
-                var reservationsDtos = _mapper.Map<List<GetReservationDto>>(reservations);
-                var result = new PagedResult<GetReservationDto>(reservationsDtos, totalElementsCount, query.PageSize, query.PageNumber);
-                return result;
+            var totalElementsCount = baseQuery.Count();
+            var reservationsDtos = _mapper.Map<List<GetReservationDto>>(reservations);
+            var result = new PagedResult<GetReservationDto>(reservationsDtos, totalElementsCount, query.PageSize, query.PageNumber);
+            return result;
         }
+
         public PagedResult<GetReservationDto> GetAllForBusiness(ReservationQuery query, int businessId)
         {
             var baseQuery = _dbContext
-                .Reservations.Where(r => r.Business.Id== businessId)
+                .Reservations.Where(r => r.Business.Id == businessId)
                 .Include(r => r.Item)
                 .Where(r => query.SearchPhrase == null || (r.FirstName.ToLower().Contains(query.SearchPhrase.ToLower())
                                                        || (r.LastName.ToLower().Contains(query.SearchPhrase.ToLower())
@@ -131,11 +136,3 @@ namespace RentItAPI.Services
         }
     }
 }
-
-            
-
-            
-    
-
-    
-

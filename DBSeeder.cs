@@ -7,15 +7,17 @@ namespace RentItAPI
     public class DBSeeder
     {
         private AppDbContext _dbContext;
+
         public DBSeeder(AppDbContext dbContext)
         {
             _dbContext = dbContext;
         }
-       public void Seed()
+
+        public void Seed()
         {
-            if(_dbContext.Database.CanConnect())
+            if (_dbContext.Database.CanConnect())
             {
-                if(!_dbContext.Roles.Any())
+                if (!_dbContext.Roles.Any())
                 {
                     var roles = GetRoles();
                     _dbContext.Roles.AddRange(roles);
@@ -23,6 +25,7 @@ namespace RentItAPI
                 }
             }
         }
+
         private IEnumerable<Role> GetRoles()
         {
             var roles = new List<Role>()
@@ -34,10 +37,9 @@ namespace RentItAPI
                 new Role()
                 {
                     Name = "Admin"
-                } 
+                }
             };
             return roles;
         }
     }
 }
-

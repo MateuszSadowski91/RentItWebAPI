@@ -16,6 +16,7 @@ namespace RentItAPI.Services
         private readonly IUserContextService _userContextService;
         private readonly IMapper _mapper;
         private readonly IEmailSender _emailSender;
+
         public RequestService(AppDbContext dbContext, IUserContextService userContextService, IMapper mapper, IEmailSender emailSender)
         {
             _dbContext = dbContext;
@@ -23,6 +24,7 @@ namespace RentItAPI.Services
             _mapper = mapper;
             _emailSender = emailSender;
         }
+
         public void AcceptRequest(int requestId, string? message)
         {
             var request = _dbContext.Requests.FirstOrDefault(r => r.Id == requestId);
@@ -43,11 +45,12 @@ namespace RentItAPI.Services
 
             _emailSender.SendReservationStatusEmail(requestReplyDto);
         }
+
         public void RejectRequest(int requestId, string? reason)
         {
             var request = _dbContext.Requests.FirstOrDefault(r => r.Id == requestId);
             if (request.CreatedById != _userContextService.GetUserId || request is null)
-               throw new NotFoundException($"Cannot reject a request of ID: ({requestId}) Please check if the ID is correct.");
+                throw new NotFoundException($"Cannot reject a request of ID: ({requestId}) Please check if the ID is correct.");
 
             request.RequestStatus = Status.Rejected;
 
@@ -59,6 +62,7 @@ namespace RentItAPI.Services
 
             _emailSender.SendReservationStatusEmail(emailDto);
         }
+
         public PagedResult<GetRequestDto> GetAll(RequestQuery query)
         {
             var baseQuery = _dbContext
@@ -91,6 +95,7 @@ namespace RentItAPI.Services
             var result = new PagedResult<GetRequestDto>(reservationsDtos, totalElementsCount, query.PageSize, query.PageNumber);
             return result;
         }
+
         public PagedResult<GetRequestDto> GetAllForBusiness(RequestQuery query, int businessId)
         {
             var baseQuery = _dbContext
@@ -124,6 +129,7 @@ namespace RentItAPI.Services
             var result = new PagedResult<GetRequestDto>(reservationsDtos, totalElementsCount, query.PageSize, query.PageNumber);
             return result;
         }
+
         public int MakeRequest(int itemId, MakeRequestDto dto)
         {
             var reservations = _dbContext.Reservations.Where(r => r.ItemId == itemId);
@@ -147,7 +153,6 @@ namespace RentItAPI.Services
             _dbContext.Add(newRequestEntity);
             _dbContext.SaveChanges();
 
-
             var emailDto = _mapper.Map<RequestEmailDto>(newRequestEntity);
             var item = _dbContext.Items.FirstOrDefault(i => i.Id == itemId);
             _mapper.Map(item, emailDto);
@@ -156,6 +161,6 @@ namespace RentItAPI.Services
             _emailSender.SendRequestConfirmationEmail(emailDto);
 
             return newRequestEntity.Id;
-        } 
+        }
     }
 }

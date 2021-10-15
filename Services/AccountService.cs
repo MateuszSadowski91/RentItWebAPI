@@ -4,7 +4,6 @@ using Microsoft.IdentityModel.Tokens;
 using RentItAPI.Entities;
 using RentItAPI.Exceptions;
 using RentItAPI.Models;
-using Restaurantapi2.Models;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -25,6 +24,7 @@ namespace RentItAPI.Services
             _passwordhasher = passwordHasher;
             _authenticationSettings = authenticationSettings;
         }
+
         public string GenerateJWT(LoginDto dto)
         {
             var user = _dbcontext.Users
@@ -64,7 +64,7 @@ namespace RentItAPI.Services
 
         public void RegisterUser(RegisterUserDto dto)
         {
-           if (dto.Password == dto.ConfirmPassword)
+            if (dto.Password == dto.ConfirmPassword)
             {
                 var newUser = new User
                 {
@@ -79,7 +79,7 @@ namespace RentItAPI.Services
                 var hashedPassword = _passwordhasher.HashPassword(newUser, dto.Password);
                 newUser.PasswordHash = hashedPassword;
                 _dbcontext.Users.Add(newUser);
-                _dbcontext.SaveChanges(); 
+                _dbcontext.SaveChanges();
             }
         }
     }

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace RentItAPI.Entities
 {
@@ -15,7 +12,7 @@ namespace RentItAPI.Entities
         public string Email { get; set; }
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }
-        string? Message { get; set; }
+        private string? Message { get; set; }
         public Status RequestStatus { get; set; } = Status.Pending;
         public virtual Business Business { get; set; }
         public virtual Item Item { get; set; }

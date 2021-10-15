@@ -10,6 +10,7 @@ namespace RentItAPI.Controllers
     public class ReservationController : ControllerBase
     {
         private readonly IReservationService _reservationService;
+
         public ReservationController(IReservationService reservationService)
         {
             _reservationService = reservationService;
