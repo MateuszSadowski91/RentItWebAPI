@@ -48,7 +48,7 @@ namespace RentItAPI.Services
                 new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
                 new Claim(ClaimTypes.Role, $"{user.Role.Name}"),
             };
-            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_authenticationSettings.JwtKey)); //przekazanie klucza prywatnego jako tablicy bajtów.
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_authenticationSettings.JwtKey));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var expires = DateTime.Now.AddDays(_authenticationSettings.JwtExpireDays);
 
