@@ -7,6 +7,7 @@ namespace RentItAPI.Controllers
 {
     [Route("api/business/{businessId}/item/{itemId}/reservation")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class ReservationController : ControllerBase
     {
         private readonly IReservationService _reservationService;
@@ -16,7 +17,6 @@ namespace RentItAPI.Controllers
             _reservationService = reservationService;
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpPut("{reservationId}")]
         public ActionResult CancelReservation([FromRoute] int reservationId, string message)
         {
@@ -40,7 +40,6 @@ namespace RentItAPI.Controllers
             return Ok(result);
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpGet("admin")]
         public ActionResult GetAllReservationsInBusiness([FromQuery] ReservationQuery query, [FromRoute] int businessId)
         {

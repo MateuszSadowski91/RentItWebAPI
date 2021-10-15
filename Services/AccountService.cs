@@ -31,7 +31,7 @@ namespace RentItAPI.Services
                  .Include(u => u.Role)
                  .FirstOrDefault(u => u.Email == dto.Email);
 
-            if (user is null)
+            if (user == null)
             {
                 throw new BadRequestException("Invalid username or password.");
             }

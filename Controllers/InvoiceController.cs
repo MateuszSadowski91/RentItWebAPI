@@ -8,6 +8,7 @@ namespace RentItAPI.Controllers
 {
     [Route("invoice")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class InvoiceController : ControllerBase
     {
         private readonly IInvoiceService _invoiceService;
@@ -17,7 +18,6 @@ namespace RentItAPI.Controllers
             _invoiceService = invoiceService;
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpPost("{businessId}")]
         public async Task<ActionResult> CreateInvoiceAsync([FromRoute] int businessId, [FromBody] InvoiceModel model)
         {
@@ -25,7 +25,6 @@ namespace RentItAPI.Controllers
             return Ok();
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpDelete("{businessId}")]
         public async Task<ActionResult> DeleteInvoiceAsync([FromRoute] int businessId, [FromBody] DeleteInvoiceDto dto)
         {
@@ -33,7 +32,6 @@ namespace RentItAPI.Controllers
             return NoContent();
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpGet("{businessId}")]
         public async Task<ActionResult> GetInvoiceAsync([FromRoute] int businessId, [FromBody] GetInvoiceDto dto)
         {
@@ -43,7 +41,6 @@ namespace RentItAPI.Controllers
             return File(result.Content, contentType, fileName);
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpGet("{businessId}/list")]
         public async Task<ActionResult> GetInvoiceListAsync([FromRoute] int businessId)
         {

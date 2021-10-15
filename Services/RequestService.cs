@@ -27,8 +27,9 @@ namespace RentItAPI.Services
 
         public void AcceptRequest(int requestId, string? message)
         {
+            
             var request = _dbContext.Requests.FirstOrDefault(r => r.Id == requestId);
-            if (request.CreatedById != _userContextService.GetUserId || request is null)
+            if (request.CreatedById != _userContextService.GetUserId || request == null)
                 throw new NotFoundException($"Cannot accept a request of ID: ({requestId}) Please check if the ID is correct.");
 
             request.RequestStatus = Status.Accepted;
@@ -49,7 +50,7 @@ namespace RentItAPI.Services
         public void RejectRequest(int requestId, string? reason)
         {
             var request = _dbContext.Requests.FirstOrDefault(r => r.Id == requestId);
-            if (request.CreatedById != _userContextService.GetUserId || request is null)
+            if (request.CreatedById != _userContextService.GetUserId || request == null)
                 throw new NotFoundException($"Cannot reject a request of ID: ({requestId}) Please check if the ID is correct.");
 
             request.RequestStatus = Status.Rejected;

@@ -60,7 +60,7 @@ namespace RentItAPI.Services
         public GetItemDto GetById(int businessId, int itemId)
         {
             var item = _dbContext.Items.FirstOrDefault(i => i.Id == itemId);
-            if (item is null || item.BusinessId != businessId)
+            if (item == null || item.BusinessId != businessId)
             {
                 throw new NotFoundException("Item not found.");
             }
@@ -73,7 +73,7 @@ namespace RentItAPI.Services
         {
             var item = _dbContext.Items.FirstOrDefault(i => i.Id == itemId);
 
-            if (item is null || item.BusinessId != businessId || item.Business.CreatedById != _userContextService.GetUserId)
+            if (item == null || item.BusinessId != businessId || item.Business.CreatedById != _userContextService.GetUserId)
             {
                 throw new NotFoundException("Item not found.");
             }
@@ -101,7 +101,7 @@ namespace RentItAPI.Services
         {
             var business = GetBusinessById(businessId);
 
-            if (business is null)
+            if (business == null)
             {
                 throw new NotFoundException("Business not found.");
             }
@@ -113,7 +113,7 @@ namespace RentItAPI.Services
             var business = _dbContext.Businesses.FirstOrDefault(b => b.Id == businessId);
             var item = _dbContext.Items.FirstOrDefault(i => i.Id == itemId);
 
-            if (item is null || item.BusinessId != businessId || item.Business.CreatedById != _userContextService.GetUserId)
+            if (item == null || item.BusinessId != businessId || item.Business.CreatedById != _userContextService.GetUserId)
             {
                 throw new NotFoundException("Item not found.");
             }

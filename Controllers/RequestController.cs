@@ -7,6 +7,7 @@ namespace RentItAPI.Controllers
 {
     [Route("api/business/{businessId}/item/{itemId}/request")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class RequestController : ControllerBase
     {
         private readonly IRequestService _requestService;
@@ -16,7 +17,6 @@ namespace RentItAPI.Controllers
             _requestService = requestService;
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpPut("accept/{requestId}")]
         public ActionResult AcceptRequest([FromRoute] int requestId, [FromBody] string? message)
         {
@@ -24,7 +24,6 @@ namespace RentItAPI.Controllers
             return Ok();
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpPut("reject/{requestId}")]
         public ActionResult RejectRequest([FromRoute] int requestId, string? message)
         {
@@ -48,7 +47,6 @@ namespace RentItAPI.Controllers
             return Ok(result);
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpGet("admin")]
         public ActionResult GetAllRequestsInBusiness([FromQuery] RequestQuery query, [FromRoute] int businessId)
         {
