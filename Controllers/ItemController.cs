@@ -30,24 +30,24 @@ namespace RentItAPI.Controllers
             return Ok(item);
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public ActionResult CreateItem([FromRoute] int businessId, [FromBody] CreateItemDto dto)
         {
             var newItemId = _itemService.Create(dto, businessId);
             return Created($"api/business/{businessId}/item/{newItemId}", null);
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpDelete("{itemId}")]
+        [Authorize(Roles = "Admin")]
         public ActionResult DeleteItem(int businessId, [FromRoute] int itemId)
         {
             _itemService.Delete(businessId, itemId);
             return NoContent();
         }
-
-        [Authorize(Roles = "Admin")]
+        
         [HttpPut("{itemId}")]
+        [Authorize(Roles = "Admin")]
         public ActionResult ModifyItem([FromBody] ModifyItemDto dto, int businessId, [FromRoute] int itemId)
         {
             _itemService.Modify(dto, businessId, itemId);

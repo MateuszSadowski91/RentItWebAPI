@@ -24,16 +24,16 @@ namespace RentItAPI.Controllers
             return Ok();
         }
 
-        [Authorize]
         [HttpPost]
+        [Authorize]
         public ActionResult MakeReservation([FromRoute] int itemId, [FromBody] MakeReservationDto dto)
         {
             var newReservationId = _reservationService.MakeReservation(itemId, dto);
             return Created($"api/business/businessId/item/{itemId}/reservation/{newReservationId}", null);
         }
 
-        [Authorize]
         [HttpGet]
+        [Authorize]
         public ActionResult GetAllReservations([FromQuery] ReservationQuery query)
         {
             var result = _reservationService.GetAll(query);

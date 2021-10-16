@@ -30,17 +30,17 @@ namespace RentItAPI.Controllers
             _requestService.RejectRequest(requestId, message);
             return Ok();
         }
-
-        [Authorize]
+        
         [HttpPost]
+        [Authorize]
         public ActionResult MakeRequest([FromRoute] int itemId, [FromBody] MakeRequestDto dto)
         {
             var newRequestId = _requestService.MakeRequest(itemId, dto);
             return Created($"api/business/businessId/item/{itemId}/request/{newRequestId}", null);
         }
 
-        [Authorize]
         [HttpGet]
+        [Authorize]
         public ActionResult GetAllRequests([FromQuery] RequestQuery query)
         {
             var result = _requestService.GetAll(query);

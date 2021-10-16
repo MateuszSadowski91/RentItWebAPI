@@ -16,16 +16,16 @@ namespace RentItAPI.Controllers
             _businessService = businessService;
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpDelete("{businessId}")]
+        [Authorize(Roles = "Admin")]
         public ActionResult DeleteBusiness([FromRoute] int businessId)
         {
             _businessService.Delete(businessId);
             return NoContent();
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public ActionResult CreateBusiness([FromBody] CreateBusinessDto dto)
         {
             var businessId = _businessService.Create(dto);
