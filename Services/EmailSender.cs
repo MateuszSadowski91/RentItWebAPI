@@ -1,4 +1,5 @@
 ﻿using FluentEmail.Core;
+using Microsoft.Extensions.Configuration;
 using RentItAPI.Models;
 using System.IO;
 
@@ -7,16 +8,19 @@ namespace RentItAPI.Services
     public class EmailSender : IEmailSender
     {
         private readonly IFluentEmail mailSender;
+        private readonly IConfiguration _configuration;
 
-        public EmailSender(IFluentEmail fluentEmail)
+        public EmailSender(IFluentEmail fluentEmail, IConfiguration configuration)
         {
             mailSender = fluentEmail;
+            _configuration = configuration;
         }
 
         public async void SendRequestNotificationEmail(RequestEmailDto dto)
         {
+            var notificationAddress = GetNotificationAddress();
             var email = mailSender
-            .To("rentitwebapi@gmail.com")
+            .To(notificationAddress)
             .Subject($"New request from {dto.FirstName} {dto.LastName}")
             .UsingTemplateFromFile($"{Directory.GetCurrentDirectory()}/wwwroot/Emails/RequestEmail.cshtml", dto);
 
@@ -59,8 +63,9 @@ namespace RentItAPI.Services
 
         public async void SendReservationNotificationEmail(ReservationConfirmationEmailDto dto)
         {
+            var notificationAddress = GetNotificationAddress();
             var email = mailSender
-                .To(dto.Email)
+                .To(notificationAddress)
                 .Subject($"New reservation from {dto.FirstName} {dto.LastName}")
                 .UsingTemplateFromFile($"{Directory.GetCurrentDirectory()}/wwwroot/Emails/ReservationNotificationEmail.cshtml", dto);
 
@@ -72,9 +77,15 @@ namespace RentItAPI.Services
             var email = mailSender
                 .To(dto.Email)
                 .Subject($"Your reservation has been canceled.")
-                 .UsingTemplateFromFile($"{Directory.GetCurrentDirectory()}/wwwroot/Emails/ReservationCancellationEmail.cshtml", dto);
+                .UsingTemplateFromFile($"{Directory.GetCurrentDirectory()}/wwwroot/Emails/ReservationCancellationEmail.cshtml", dto);
 
             await email.SendAsync();
+        }
+        private string GetNotificationAddress()
+        {
+            var notificationAddress = _configuration.GetSection("Gmail")["Sender"];
+
+            return notificationAddress;
         }
     }
 }
