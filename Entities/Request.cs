@@ -12,7 +12,7 @@ namespace RentItAPI.Entities
         public string Email { get; set; }
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }
-        private string? Message { get; set; }
+        public string? Message { get; set; }
         public Status RequestStatus { get; set; } = Status.Pending;
         public virtual Business Business { get; set; }
         public virtual Item Item { get; set; }

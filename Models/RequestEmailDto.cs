@@ -10,7 +10,7 @@ namespace RentItAPI.Models
         public string ItemName { get; set; }
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }
-        public string Message { get; set; }
+        public string? Message { get; set; }
         public decimal Price { get; set; }
     }
 }

@@ -7,7 +7,7 @@ namespace RentItAPI.Controllers
 {
     [Route("api/business/{businessId}/item/{itemId}/request")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
+   // [Authorize(Roles = "Admin")]
     public class RequestController : ControllerBase
     {
         private readonly IRequestService _requestService;
