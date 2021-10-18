@@ -1,10 +1,11 @@
 ﻿using RentItAPI.Models;
+using System.Threading.Tasks;
 
 namespace RentItAPI.Services
 {
     public interface IRequestService
     {
-        int MakeRequest(int itemId, MakeRequestDto dto);
+        Task<int> MakeRequest(int itemId, MakeRequestDto dto);
 
         PagedResult<GetRequestDto> GetAll(RequestQuery query);
 

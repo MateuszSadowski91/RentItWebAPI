@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace RentItAPI.Services
 {
@@ -131,7 +132,7 @@ namespace RentItAPI.Services
             return result;
         }
 
-        public int MakeRequest(int itemId, MakeRequestDto dto)
+        public async Task<int> MakeRequest(int itemId, MakeRequestDto dto)
         {
             var reservations = _dbContext.Reservations.Where(r => r.ItemId == itemId);
             foreach (var reservation in reservations)
@@ -157,9 +158,9 @@ namespace RentItAPI.Services
             var emailDto = _mapper.Map<RequestEmailDto>(newRequestEntity);
             var item = _dbContext.Items.FirstOrDefault(i => i.Id == itemId);
             _mapper.Map(item, emailDto);
-
-            _emailSender.SendRequestNotificationEmail(emailDto);
-            _emailSender.SendRequestConfirmationEmail(emailDto);
+            await _emailSender.SendRequestConfirmationEmail(emailDto);
+            await _emailSender.SendRequestNotificationEmail(emailDto);
+          
 
             return newRequestEntity.Id;
         }

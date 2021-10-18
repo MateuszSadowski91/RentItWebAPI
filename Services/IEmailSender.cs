@@ -1,12 +1,13 @@
 ﻿using RentItAPI.Models;
+using System.Threading.Tasks;
 
 namespace RentItAPI.Services
 {
     public interface IEmailSender
     {
-        void SendRequestNotificationEmail(RequestEmailDto dto);
+        Task SendRequestNotificationEmail(RequestEmailDto dto);
 
-        void SendRequestConfirmationEmail(RequestEmailDto dto);
+        Task SendRequestConfirmationEmail(RequestEmailDto dto);
 
         void SendReservationStatusEmail(ReservationStatusEmailDto dto);
 

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using RentItAPI.Models;
 using RentItAPI.Services;
+using System.Threading.Tasks;
 
 namespace RentItAPI.Controllers
 {
@@ -33,9 +34,9 @@ namespace RentItAPI.Controllers
         
         [HttpPost]
         [Authorize]
-        public ActionResult MakeRequest([FromRoute] int itemId, [FromBody] MakeRequestDto dto)
+        public async Task <IActionResult> MakeRequest([FromRoute] int itemId, [FromBody] MakeRequestDto dto)
         {
-            var newRequestId = _requestService.MakeRequest(itemId, dto);
+            var newRequestId = await _requestService.MakeRequest(itemId, dto);
             return Created($"api/business/businessId/item/{itemId}/request/{newRequestId}", null);
         }
 

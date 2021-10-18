@@ -2,24 +2,27 @@
 using Microsoft.Extensions.Configuration;
 using RentItAPI.Models;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace RentItAPI.Services
 {
     public class EmailSender : IEmailSender
     {
-        private readonly IFluentEmail mailSender;
+        private readonly IFluentEmailFactory mailSender;
         private readonly IConfiguration _configuration;
 
-        public EmailSender(IFluentEmail fluentEmail, IConfiguration configuration)
+        public EmailSender(IFluentEmailFactory fluentEmail, IConfiguration configuration)
         {
             mailSender = fluentEmail;
             _configuration = configuration;
         }
 
-        public async void SendRequestNotificationEmail(RequestEmailDto dto)
+        public async Task SendRequestNotificationEmail(RequestEmailDto dto)
         {
+   
             var notificationAddress = GetNotificationAddress();
             var email = mailSender
+            .Create()
             .To(notificationAddress)
             .Subject($"New request from {dto.FirstName} {dto.LastName}")
             .UsingTemplateFromFile($"{Directory.GetCurrentDirectory()}/wwwroot/Emails/RequestEmail.cshtml", dto);
@@ -27,9 +30,10 @@ namespace RentItAPI.Services
             await email.SendAsync();
         }
 
-        public async void SendRequestConfirmationEmail(RequestEmailDto dto)
+        public async Task SendRequestConfirmationEmail(RequestEmailDto dto)
         {
             var email = mailSender
+                .Create()
                 .To(dto.Email)
                 .Subject($"Your request regarding {dto.ItemName} has been sent.")
                 .UsingTemplateFromFile($"{Directory.GetCurrentDirectory()}/wwwroot/Emails/RequestConfirmationEmail.cshtml", dto);
@@ -40,6 +44,7 @@ namespace RentItAPI.Services
         public async void SendReservationStatusEmail(ReservationStatusEmailDto dto)
         {
             var email = mailSender
+                .Create()
                 .To(dto.Email)
                 .Subject($"Your request regarding {dto.ItemName} has been {dto.ReservationStatus}.");
             if (dto.ReservationStatus is "Accepted")
@@ -54,6 +59,7 @@ namespace RentItAPI.Services
         public async void SendReservationConfirmationEmail(ReservationConfirmationEmailDto dto)
         {
             var email = mailSender
+                .Create()
                 .To(dto.Email)
                 .Subject($"Your reservation of {dto.ItemName} has been made.")
                 .UsingTemplateFromFile($"{Directory.GetCurrentDirectory()}/wwwroot/Emails/ReservationConfirmationEmail.cshtml", dto);
@@ -65,6 +71,7 @@ namespace RentItAPI.Services
         {
             var notificationAddress = GetNotificationAddress();
             var email = mailSender
+                .Create()
                 .To(notificationAddress)
                 .Subject($"New reservation from {dto.FirstName} {dto.LastName}")
                 .UsingTemplateFromFile($"{Directory.GetCurrentDirectory()}/wwwroot/Emails/ReservationNotificationEmail.cshtml", dto);
@@ -75,6 +82,7 @@ namespace RentItAPI.Services
         public async void SendReservationCancellationEmail(ReservationStatusEmailDto dto)
         {
             var email = mailSender
+                .Create()
                 .To(dto.Email)
                 .Subject($"Your reservation has been canceled.")
                 .UsingTemplateFromFile($"{Directory.GetCurrentDirectory()}/wwwroot/Emails/ReservationCancellationEmail.cshtml", dto);
