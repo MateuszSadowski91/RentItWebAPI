@@ -7,6 +7,7 @@ namespace RentItAPI.Controllers
 {
     [Route("api/business")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class BusinessController : ControllerBase
     {
         private readonly IBusinessService _businessService;
@@ -17,7 +18,6 @@ namespace RentItAPI.Controllers
         }
 
         [HttpDelete("{businessId}")]
-        [Authorize(Roles = "Admin")]
         public ActionResult DeleteBusiness([FromRoute] int businessId)
         {
             _businessService.Delete(businessId);
@@ -25,20 +25,19 @@ namespace RentItAPI.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
         public ActionResult CreateBusiness([FromBody] CreateBusinessDto dto)
         {
             var businessId = _businessService.Create(dto);
             return Created($"api/business/{businessId}", null);
         }
-
+        [AllowAnonymous]
         [HttpGet("{businessId}")]
         public ActionResult GetBusinessById([FromRoute] int businessId)
         {
             var business = _businessService.GetById(businessId);
             return Ok(business);
         }
-
+        [AllowAnonymous]
         [HttpGet]
         public ActionResult GetAllBusinesses()
         {

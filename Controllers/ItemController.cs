@@ -17,6 +17,7 @@ namespace RentItAPI.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public ActionResult GetAllItems([FromRoute] int businessId, [FromQuery] ItemQuery query)
         {
             var items = _itemService.GetAll(businessId, query);
@@ -24,6 +25,7 @@ namespace RentItAPI.Controllers
         }
 
         [HttpGet("{itemId}")]
+        [AllowAnonymous]
         public ActionResult GetItemById([FromRoute] int businessId, [FromRoute] int itemId)
         {
             var item = _itemService.GetById(businessId, itemId);

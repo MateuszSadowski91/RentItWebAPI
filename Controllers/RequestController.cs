@@ -8,7 +8,7 @@ namespace RentItAPI.Controllers
 {
     [Route("api/business/{businessId}/item/{itemId}/request")]
     [ApiController]
-   // [Authorize(Roles = "Admin")]
+    [Authorize]
     public class RequestController : ControllerBase
     {
         private readonly IRequestService _requestService;
@@ -19,6 +19,7 @@ namespace RentItAPI.Controllers
         }
 
         [HttpPut("accept/{requestId}")]
+        [Authorize(Roles = "Admin")]
         public ActionResult AcceptRequest([FromRoute] int requestId, [FromBody] string? message)
         {
             _requestService.AcceptRequest(requestId, message);
@@ -26,6 +27,7 @@ namespace RentItAPI.Controllers
         }
 
         [HttpPut("reject/{requestId}")]
+        [Authorize(Roles = "Admin")]
         public ActionResult RejectRequest([FromRoute] int requestId, string? message)
         {
             _requestService.RejectRequest(requestId, message);
@@ -33,7 +35,6 @@ namespace RentItAPI.Controllers
         }
         
         [HttpPost]
-        [Authorize]
         public async Task <IActionResult> MakeRequest([FromRoute] int itemId, [FromBody] MakeRequestDto dto)
         {
             var newRequestId = await _requestService.MakeRequest(itemId, dto);
@@ -41,7 +42,7 @@ namespace RentItAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public ActionResult GetAllRequests([FromQuery] RequestQuery query)
         {
             var result = _requestService.GetAll(query);
@@ -49,6 +50,7 @@ namespace RentItAPI.Controllers
         }
 
         [HttpGet("admin")]
+        [Authorize(Roles = "Admin")]
         public ActionResult GetAllRequestsInBusiness([FromQuery] RequestQuery query, [FromRoute] int businessId)
         {
             var result = _requestService.GetAllForBusiness(query, businessId);

@@ -7,7 +7,7 @@ namespace RentItAPI.Controllers
 {
     [Route("api/business/{businessId}/item/{itemId}/reservation")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class ReservationController : ControllerBase
     {
         private readonly IReservationService _reservationService;
@@ -18,6 +18,7 @@ namespace RentItAPI.Controllers
         }
 
         [HttpPut("{reservationId}")]
+        [Authorize(Roles = "Admin")]
         public ActionResult CancelReservation([FromRoute] int reservationId, string message)
         {
             _reservationService.CancelReservation(reservationId, message);
@@ -25,7 +26,6 @@ namespace RentItAPI.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public ActionResult MakeReservation([FromRoute] int itemId, [FromBody] MakeReservationDto dto)
         {
             var newReservationId = _reservationService.MakeReservation(itemId, dto);
@@ -33,7 +33,7 @@ namespace RentItAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public ActionResult GetAllReservations([FromQuery] ReservationQuery query)
         {
             var result = _reservationService.GetAll(query);
@@ -41,6 +41,7 @@ namespace RentItAPI.Controllers
         }
 
         [HttpGet("admin")]
+        [Authorize(Roles = "Admin")]
         public ActionResult GetAllReservationsInBusiness([FromQuery] ReservationQuery query, [FromRoute] int businessId)
         {
             var result = _reservationService.GetAllForBusiness(query, businessId);
