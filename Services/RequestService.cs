@@ -45,7 +45,7 @@ namespace RentItAPI.Services
             requestReplyDto.ReplyMessage = message;
             requestReplyDto.ReservationStatus = request.RequestStatus.ToString();
 
-            _emailSender.SendReservationStatusEmail(requestReplyDto);
+           await _emailSender.SendReservationStatusEmail(requestReplyDto);
         }
 
         public async Task RejectRequest(int requestId, string? reason)
@@ -62,7 +62,7 @@ namespace RentItAPI.Services
             emailDto.ReplyMessage = reason;
             emailDto.ReservationStatus = request.RequestStatus.ToString();
 
-            _emailSender.SendReservationStatusEmail(emailDto);
+           await _emailSender.SendReservationStatusEmail(emailDto);
         }
 
         public PagedResult<GetRequestDto> GetAll(RequestQuery query)
@@ -137,12 +137,7 @@ namespace RentItAPI.Services
             var reservations = _dbContext.Reservations.Where(r => r.ItemId == itemId);
             foreach (var reservation in reservations)
             {
-                if (dto.DateTo >= reservation.DateFrom && dto.DateTo <= reservation.DateTo
-                || dto.DateFrom >= reservation.DateFrom && dto.DateFrom <= reservation.DateTo
-                || dto.DateFrom <= reservation.DateFrom && dto.DateTo >= reservation.DateTo)
-                {
-                    throw new BadRequestException("Inserted dates collide with dates of existing reservations.");
-                }
+                CheckIfDatesCollide(dto, reservation);
             }
             var user = _dbContext.Users.FirstOrDefault(u => u.Id == _userContextService.GetUserId);
 
@@ -158,11 +153,22 @@ namespace RentItAPI.Services
             var emailDto = _mapper.Map<RequestEmailDto>(newRequestEntity);
             var item = _dbContext.Items.FirstOrDefault(i => i.Id == itemId);
             _mapper.Map(item, emailDto);
+
             await _emailSender.SendRequestConfirmationEmail(emailDto);
             await _emailSender.SendRequestNotificationEmail(emailDto);
           
 
             return newRequestEntity.Id;
+        }
+
+        private static void CheckIfDatesCollide(MakeRequestDto dto, Reservation reservation)
+        {
+            if (dto.DateTo >= reservation.DateFrom && dto.DateTo <= reservation.DateTo
+            || dto.DateFrom >= reservation.DateFrom && dto.DateFrom <= reservation.DateTo
+            || dto.DateFrom <= reservation.DateFrom && dto.DateTo >= reservation.DateTo)
+            {
+                throw new BadRequestException("Inserted dates collide with dates of existing reservations.");
+            }
         }
     }
 }

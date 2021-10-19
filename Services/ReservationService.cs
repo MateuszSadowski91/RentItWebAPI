@@ -45,12 +45,7 @@ namespace RentItAPI.Services
             var reservations = _dbContext.Reservations.Where(r => r.ItemId == itemId);
             foreach (var reservation in reservations)
             {
-                if (dto.DateTo >= reservation.DateFrom && dto.DateTo <= reservation.DateTo
-                || dto.DateFrom >= reservation.DateFrom && dto.DateFrom <= reservation.DateTo
-                || dto.DateFrom <= reservation.DateFrom && dto.DateTo >= reservation.DateTo)
-                {
-                    throw new BadRequestException("Inserted dates collide with dates of existing reservations.");
-                }
+                CheckIfDatesCollide(dto, reservation);
             }
             var user = _dbContext.Users.FirstOrDefault(u => u.Id == _userContextService.GetUserId);
 
@@ -134,6 +129,15 @@ namespace RentItAPI.Services
             var reservationsDtos = _mapper.Map<List<GetReservationDto>>(reservations);
             var result = new PagedResult<GetReservationDto>(reservationsDtos, totalElementsCount, query.PageSize, query.PageNumber);
             return result;
+        }
+        private static void CheckIfDatesCollide(MakeReservationDto dto, Reservation reservation)
+        {
+            if (dto.DateTo >= reservation.DateFrom && dto.DateTo <= reservation.DateTo
+            || dto.DateFrom >= reservation.DateFrom && dto.DateFrom <= reservation.DateTo
+            || dto.DateFrom <= reservation.DateFrom && dto.DateTo >= reservation.DateTo)
+            {
+                throw new BadRequestException("Inserted dates collide with dates of existing reservations.");
+            }
         }
     }
 }
