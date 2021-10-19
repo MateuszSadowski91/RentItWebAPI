@@ -1,4 +1,5 @@
 ﻿using Azure.Storage.Blobs;
+using Microsoft.Extensions.Configuration;
 using RentItAPI.Models;
 using System.Collections.Generic;
 using System.IO;
@@ -10,22 +11,23 @@ namespace RentItAPI.Services
     public class BlobService : IBlobService
     {
         private readonly BlobServiceClient _blobServiceClient;
-
-        public BlobService(BlobServiceClient blobServiceClient)
+        private readonly IConfiguration _configuration;
+        public BlobService(BlobServiceClient blobServiceClient, IConfiguration configuration)
         {
             _blobServiceClient = blobServiceClient;
+            _configuration = configuration;
         }
 
         public async Task DeleteInvoiceBlobAsync(string name)
         {
-            var containerClient = _blobServiceClient.GetBlobContainerClient("invoice");
+            var containerClient = GetContainerClient();
             var blobClient = containerClient.GetBlobClient(name);
             await blobClient.DeleteIfExistsAsync();
         }
 
         public async Task<BlobInformation> GetInvoiceBlobAsync(string name)
         {
-            var containerClient = _blobServiceClient.GetBlobContainerClient("invoice");
+            var containerClient = GetContainerClient();
             var blobClient = containerClient.GetBlobClient(name);
             var blobDownloadInfo = await blobClient.DownloadAsync();
 
@@ -34,7 +36,7 @@ namespace RentItAPI.Services
 
         public async Task<IEnumerable<string>> ListInvoiceBlobsAsync(string taxNumber)
         {
-            var containerClient = _blobServiceClient.GetBlobContainerClient("invoice");
+            var containerClient = GetContainerClient();
             var items = new List<string>();
 
             await foreach (var blobItem in containerClient.GetBlobsAsync())
@@ -49,7 +51,7 @@ namespace RentItAPI.Services
 
         public async Task UploadHttpContentAsync(HttpContent httpContent, string fileName)
         {
-            var containerClient = _blobServiceClient.GetBlobContainerClient("invoice");
+            var containerClient = GetContainerClient();
             var blobClient = containerClient.GetBlobClient(fileName);
 
             await httpContent.LoadIntoBufferAsync();
@@ -57,6 +59,12 @@ namespace RentItAPI.Services
             {
                 await blobClient.UploadAsync(stream);
             }
+        }
+        private BlobContainerClient GetContainerClient()
+        {
+            var containerName = _configuration.GetValue<string>("BlobContainer");
+            var client = _blobServiceClient.GetBlobContainerClient(containerName);
+            return client;
         }
     }
 }
