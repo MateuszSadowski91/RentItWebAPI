@@ -41,7 +41,7 @@ namespace RentItAPI.Services
             await email.SendAsync();
         }
 
-        public async void SendReservationStatusEmail(ReservationStatusEmailDto dto)
+        public async Task SendReservationStatusEmail(ReservationStatusEmailDto dto)
         {
             var email = mailSender
                 .Create()
@@ -56,7 +56,7 @@ namespace RentItAPI.Services
             await email.SendAsync();
         }
 
-        public async void SendReservationConfirmationEmail(ReservationConfirmationEmailDto dto)
+        public async Task SendReservationConfirmationEmail(ReservationConfirmationEmailDto dto)
         {
             var email = mailSender
                 .Create()
@@ -67,7 +67,7 @@ namespace RentItAPI.Services
             await email.SendAsync();
         }
 
-        public async void SendReservationNotificationEmail(ReservationConfirmationEmailDto dto)
+        public async Task SendReservationNotificationEmail(ReservationConfirmationEmailDto dto)
         {
             var notificationAddress = GetNotificationAddress();
             var email = mailSender
@@ -79,7 +79,7 @@ namespace RentItAPI.Services
             await email.SendAsync();
         }
 
-        public async void SendReservationCancellationEmail(ReservationStatusEmailDto dto)
+        public async Task SendReservationCancellationEmail(ReservationStatusEmailDto dto)
         {
             var email = mailSender
                 .Create()

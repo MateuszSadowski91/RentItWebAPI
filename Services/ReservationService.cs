@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace RentItAPI.Services
 {
@@ -25,7 +26,7 @@ namespace RentItAPI.Services
             _emailSender = emailSender;
         }
 
-        public void CancelReservation(int reservationId, string message)
+        public async Task CancelReservation(int reservationId, string message)
         {
             var reservation = _dbContext.Reservations.FirstOrDefault(r => r.Id == reservationId);
             reservation.ReservationStatus = Status.Canceled;
@@ -36,10 +37,10 @@ namespace RentItAPI.Services
             emailDto.ReplyMessage = message;
             _mapper.Map(item, emailDto);
 
-            _emailSender.SendReservationCancellationEmail(emailDto);
+            await _emailSender.SendReservationCancellationEmail(emailDto);
         }
 
-        public int MakeReservation(int itemId, MakeReservationDto dto)
+        public async Task<int> MakeReservation(int itemId, MakeReservationDto dto)
         {
             var reservations = _dbContext.Reservations.Where(r => r.ItemId == itemId);
             foreach (var reservation in reservations)
@@ -63,8 +64,8 @@ namespace RentItAPI.Services
             _dbContext.SaveChanges();
 
             var emailDto = _mapper.Map<ReservationConfirmationEmailDto>(reservationEntity);
-            _emailSender.SendReservationConfirmationEmail(emailDto);
-            _emailSender.SendReservationNotificationEmail(emailDto);
+            await _emailSender.SendReservationConfirmationEmail(emailDto);
+            await _emailSender.SendReservationNotificationEmail(emailDto);
 
             return reservationEntity.Id;
         }

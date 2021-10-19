@@ -9,12 +9,12 @@ namespace RentItAPI.Services
 
         Task SendRequestConfirmationEmail(RequestEmailDto dto);
 
-        void SendReservationStatusEmail(ReservationStatusEmailDto dto);
+        Task SendReservationStatusEmail(ReservationStatusEmailDto dto);
 
-        void SendReservationConfirmationEmail(ReservationConfirmationEmailDto dto);
+        Task SendReservationConfirmationEmail(ReservationConfirmationEmailDto dto);
 
-        void SendReservationNotificationEmail(ReservationConfirmationEmailDto dto);
+        Task SendReservationNotificationEmail(ReservationConfirmationEmailDto dto);
 
-        void SendReservationCancellationEmail(ReservationStatusEmailDto dto);
+        Task SendReservationCancellationEmail(ReservationStatusEmailDto dto);
     }
 }

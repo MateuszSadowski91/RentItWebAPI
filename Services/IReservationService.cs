@@ -1,12 +1,13 @@
 ﻿using RentItAPI.Models;
+using System.Threading.Tasks;
 
 namespace RentItAPI.Services
 {
     public interface IReservationService
     {
-        int MakeReservation(int itemId, MakeReservationDto dto);
+        Task<int> MakeReservation(int itemId, MakeReservationDto dto);
 
-        void CancelReservation(int reservationId, string message);
+        Task CancelReservation(int reservationId, string message);
 
         PagedResult<GetReservationDto> GetAll(ReservationQuery query);
 

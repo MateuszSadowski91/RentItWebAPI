@@ -11,8 +11,8 @@ namespace RentItAPI.Services
 
         PagedResult<GetRequestDto> GetAllForBusiness(RequestQuery query, int businessId);
 
-        void AcceptRequest(int requestId, string? message);
+        Task AcceptRequest(int requestId, string? message);
 
-        void RejectRequest(int requestId, string? reason);
+        Task RejectRequest(int requestId, string? reason);
     }
 }

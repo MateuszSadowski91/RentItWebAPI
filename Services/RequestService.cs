@@ -26,7 +26,7 @@ namespace RentItAPI.Services
             _emailSender = emailSender;
         }
 
-        public void AcceptRequest(int requestId, string? message)
+        public async Task AcceptRequest(int requestId, string? message)
         {
             
             var request = _dbContext.Requests.FirstOrDefault(r => r.Id == requestId);
@@ -48,7 +48,7 @@ namespace RentItAPI.Services
             _emailSender.SendReservationStatusEmail(requestReplyDto);
         }
 
-        public void RejectRequest(int requestId, string? reason)
+        public async Task RejectRequest(int requestId, string? reason)
         {
             var request = _dbContext.Requests.FirstOrDefault(r => r.Id == requestId);
             if (request.CreatedById != _userContextService.GetUserId || request == null)

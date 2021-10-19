@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using RentItAPI.Models;
 using RentItAPI.Services;
+using System.Threading.Tasks;
 
 namespace RentItAPI.Controllers
 {
@@ -19,16 +20,16 @@ namespace RentItAPI.Controllers
 
         [HttpPut("{reservationId}")]
         [Authorize(Roles = "Admin")]
-        public ActionResult CancelReservation([FromRoute] int reservationId, string message)
+        public async Task <IActionResult> CancelReservation([FromRoute] int reservationId, string message)
         {
-            _reservationService.CancelReservation(reservationId, message);
+            await _reservationService.CancelReservation(reservationId, message);
             return Ok();
         }
 
         [HttpPost]
-        public ActionResult MakeReservation([FromRoute] int itemId, [FromBody] MakeReservationDto dto)
+        public async Task <IActionResult> MakeReservation([FromRoute] int itemId, [FromBody] MakeReservationDto dto)
         {
-            var newReservationId = _reservationService.MakeReservation(itemId, dto);
+            var newReservationId = await _reservationService.MakeReservation(itemId, dto);
             return Created($"api/business/businessId/item/{itemId}/reservation/{newReservationId}", null);
         }
 

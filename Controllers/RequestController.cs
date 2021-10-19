@@ -20,17 +20,17 @@ namespace RentItAPI.Controllers
 
         [HttpPut("accept/{requestId}")]
         [Authorize(Roles = "Admin")]
-        public ActionResult AcceptRequest([FromRoute] int requestId, [FromBody] string? message)
+        public async Task<IActionResult> AcceptRequest([FromRoute] int requestId, [FromBody] string? message)
         {
-            _requestService.AcceptRequest(requestId, message);
+            await _requestService.AcceptRequest(requestId, message);
             return Ok();
         }
 
         [HttpPut("reject/{requestId}")]
         [Authorize(Roles = "Admin")]
-        public ActionResult RejectRequest([FromRoute] int requestId, string? message)
+        public async Task<IActionResult> RejectRequest([FromRoute] int requestId, string? message)
         {
-            _requestService.RejectRequest(requestId, message);
+            await _requestService.RejectRequest(requestId, message);
             return Ok();
         }
         
