@@ -12,6 +12,7 @@ namespace RentItAPI.Services
     {
         private readonly BlobServiceClient _blobServiceClient;
         private readonly IConfiguration _configuration;
+
         public BlobService(BlobServiceClient blobServiceClient, IConfiguration configuration)
         {
             _blobServiceClient = blobServiceClient;
@@ -60,6 +61,7 @@ namespace RentItAPI.Services
                 await blobClient.UploadAsync(stream);
             }
         }
+
         private BlobContainerClient GetContainerClient()
         {
             var containerName = _configuration.GetValue<string>("BlobContainer");

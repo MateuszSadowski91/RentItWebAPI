@@ -30,6 +30,7 @@ namespace RentItAPI.Controllers
             var businessId = _businessService.Create(dto);
             return Created($"api/business/{businessId}", null);
         }
+
         [AllowAnonymous]
         [HttpGet("{businessId}")]
         public ActionResult GetBusinessById([FromRoute] int businessId)
@@ -37,6 +38,7 @@ namespace RentItAPI.Controllers
             var business = _businessService.GetById(businessId);
             return Ok(business);
         }
+
         [AllowAnonymous]
         [HttpGet]
         public ActionResult GetAllBusinesses()
